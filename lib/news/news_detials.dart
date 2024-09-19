@@ -32,7 +32,8 @@ class NewsDetials extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: Image.network(articles.urlToImage??"https://rapidapi.com/blog/wp-content/uploads/2020/01/Top-10-Best-News-API-refresh_blogimage_v3.jpg",
+                child: Image.network(articles.urlToImage??
+                    "https://rapidapi.com/blog/wp-content/uploads/2020/01/Top-10-Best-News-API-refresh_blogimage_v3.jpg",
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height*0.25,
                   fit: BoxFit.cover,
