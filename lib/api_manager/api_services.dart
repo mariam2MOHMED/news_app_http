@@ -19,13 +19,14 @@ static Future<SourcesResponse> getSources(String categoryId)async {
   return SourcesResponse.fromJson(json);
 }
 static Future<NewsResponse> getNews(
-    {String? sourceId,String? query,int?page,int? pageSize})async{
+    {String? sourceId,String? query,
+      String?page})async{
   final uri=Uri.https(ApiConstant.baseUrl,
       ApiConstant.newsEndPoint,{
         'apiKey': ApiConstant.apiKey,
         'sources': sourceId,
         'q':query,
-        'pageSize':pageSize.toString(),
+        'pageSize':'10',
         'page':page.toString()
       });
  final response= await http.get(uri);

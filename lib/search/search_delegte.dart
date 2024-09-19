@@ -72,7 +72,14 @@ return   Container(
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container();
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          image: DecorationImage(image: AssetImage('assets/pattern.png'))
+      ),
+    );
   }
 
 }
