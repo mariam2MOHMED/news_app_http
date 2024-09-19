@@ -16,8 +16,10 @@ final List<Sources>sources;
 
 class _sourcesTabState extends State<sourcesTab> {
   int selectedIndex=0;
+
   int page=1;
   int pageSize=20;
+
   @override
   Widget build(BuildContext context) {
     return    Column(
@@ -38,7 +40,10 @@ class _sourcesTabState extends State<sourcesTab> {
               indicatorColor:Colors.transparent ,
               dividerColor: Colors.transparent,
               tabs: widget.sources.map((source) => tabItem(
+
                   isSelected:widget.sources.indexOf(source)==selectedIndex,
+
+
                   source:source.name?? "",
               )).toList()),
         ),

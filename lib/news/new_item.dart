@@ -46,7 +46,11 @@ class newsItem extends StatelessWidget {
               SizedBox(height: 4.0,),
               Align(
                 alignment: AlignmentDirectional.centerEnd,
-                child: Text(articles.publishedAt??"",
+
+
+
+                child: Text(articles.publishedAt!.substring(0,10)??"",
+
 
                   style: Theme.of(context).textTheme.titleSmall!.
                 copyWith(

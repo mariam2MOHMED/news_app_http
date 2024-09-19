@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_route/api_manager/api_services.dart';
+
+import 'package:news_app_route/models/News.dart';
+
 import 'package:news_app_route/widgets/error_indictor.dart';
 import 'package:news_app_route/widgets/loading_indicitor.dart';
 
@@ -14,14 +17,21 @@ class NewsList extends StatefulWidget {
 }
 
 class _NewsListState extends State<NewsList> {
-  int page=1;
-  int pageSize=20;
-  ScrollController scrollController=ScrollController();
-  @override
+
+
+   int page=1;
+   int pageSize=10;
+   bool lastPage=false;
+   List<Articles>newsList=[];
+ ScrollController scrollController=ScrollController();
+
+ @override
+
   void initState() {
     // TODO: implement initState
     super.initState();
     scrollController.addListener(() {
+
   if(scrollController.position.atEdge){
     print("atEdge---------------");
     if(scrollController.offset!=0){
@@ -37,42 +47,96 @@ class _NewsListState extends State<NewsList> {
     }
   }
 
+ if(scrollController.position.atEdge&&
+     scrollController.position.pixels!=0){
+   if(lastPage==false){page++;setState(() {
+
+   });}
+
+
+ }
+
+
     });
   }
   @override
+
+
+
+  void didUpdateWidget(  oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+     page=1;
+     pageSize=10;
+     lastPage=false;newsList=[];
+
+  }
+  @override
   Widget build(BuildContext context) {
+print("page $page");
 
 
     return
       FutureBuilder(
       future: ApiServices.getNews(sourceId: widget.sourceId,
+
       page: page,
         pageSize: pageSize
       ),
-      builder: (context,snapShot){
-       if(snapShot.connectionState==ConnectionState.waiting){
-         return loadingIndicitor();
-       }else if(snapShot.hasError||snapShot.data!.status!='ok'){
-         return errorIndictor();
-       }else{
-         final newsList=snapShot.data?.articles??[];
-         return  RefreshIndicator(
-           onRefresh: ()async{
-             setState(() {
+          builder: (context,snapShot){
+            if(snapShot.connectionState==ConnectionState.waiting&&newsList.isEmpty){
+              return const loadingIndicitor();
+            }else if(snapShot.hasError||snapShot.data!.status!='ok'){
+              return const errorIndictor();
+            } if((snapShot.data?.articles??[]).isNotEmpty){
+              if(snapShot.data!.articles!.length <10){
+                lastPage=true;
+              }
+              newsList.addAll(snapShot.data!.articles!);}
+            else{
+              lastPage=true;
+              // final newsList=snapShot.data?.articles??[];
 
-               page=1;
-             });
-           },
-           child: ListView.builder(
-             controller:scrollController ,
-             itemBuilder: (_,index){
-             return newsItem(newsList[index]);
-           },itemCount: newsList.length,),
-         );
-       }
-      },
+            }
+            return  ListView.builder(
+              controller:scrollController ,
+              itemBuilder: (_,index){
+                return newsItem(newsList[index]);
+              },itemCount: newsList.length,);
+          }
 
 
-    );
+
+
+      );
+
+      // builder: (context,snapShot){
+      //  if(snapShot.connectionState==ConnectionState.waiting){
+      //    return loadingIndicitor();
+      //  }else if(snapShot.hasError||snapShot.data!.status!='ok'){
+      //    return errorIndictor();
+      //  }else{
+      //    final newsList=snapShot.data?.articles??[];
+      //    return  RefreshIndicator(
+      //      onRefresh: ()async{
+      //        setState(() {
+      //
+      //          page=1;
+      //        });
+      //      },
+      //      child: ListView.builder(
+      //        controller:scrollController ,
+      //        itemBuilder: (_,index){
+      //        return newsItem(newsList[index]);
+      //      },itemCount: newsList.length,),
+      //    );
+      //  }
+      // },
+      //
+      //  page: page.toString(),
+       //  pageSize: pageSize
+
+
+
   }
 }
